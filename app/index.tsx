@@ -3,8 +3,8 @@ import { Text, View } from 'react-native'
 
 const index = () => {
   return (
-    <View>
-        <Text>Index Page</Text>
+    <View className='pt-10'>
+        <Text className='text-red-500'>Index Page</Text>
     </View>
   )
 }
