@@ -1,9 +1,21 @@
-import { Slot } from 'expo-router'
-import React from 'react'
-import './global.css'
+import { ThemeProvider, useTheme } from '@/lib/theme-context';
+import { Slot } from 'expo-router';
+import { View } from 'react-native';
+import './global.css';
 
-const _layout = () => {
-  return <Slot />
+export default function RootLayout() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      <AppContent />
+    </ThemeProvider>
+  );
 }
 
-export default _layout  
+function AppContent() {
+  const { activeTheme } = useTheme();
+  return (
+    <View style={activeTheme} className="flex-1 bg-background">
+      <Slot />
+    </View>
+  );
+}
