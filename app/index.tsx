@@ -5,9 +5,9 @@ import { Text, View } from 'react-native'
 const index = () => {
   return (
     <View className='pt-10 px-4'>
-        <Text className='text-red-500 mb-4'>Index Page</Text>
-        <Button variant='secondary' className='mb-4'>
-          <Text className='text-red-300'>Default Button</Text>
+        <Text className='text-primary mb-4'>Index Page</Text>
+        <Button variant='default' className='mb-4'>
+          <Text className='text-primary-foreground'>Default Button</Text>
         </Button>
     </View>
   )
