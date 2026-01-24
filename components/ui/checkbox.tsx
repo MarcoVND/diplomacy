@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils"
 import { Ionicons } from "@expo/vector-icons"
-import { useColorScheme } from "nativewind"
 import * as React from "react"
 import { Pressable, Text } from "react-native"
 
@@ -29,7 +28,6 @@ const Checkbox = React.forwardRef<
   id,
   ...props
 }, ref) => {
-  const { colorScheme } = useColorScheme()
   const [innerChecked, setInnerChecked] = React.useState<boolean>(
     checked !== undefined ? checked : defaultChecked || false
   )

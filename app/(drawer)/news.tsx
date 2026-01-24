@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const news = () => {
+const News = () => {
   return (
     <View>
       <Text className="text-white">news</Text>
@@ -9,4 +9,4 @@ const news = () => {
   );
 };
 
-export default news;
+export default News;

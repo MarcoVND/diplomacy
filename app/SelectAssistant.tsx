@@ -1,29 +1,24 @@
-// app/onboarding.tsx
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
-
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useLegalAssistantStore } from "../stores/LegalAssistantStore";
+import AssistantCard from "@/components/widgets/AssistantCard";
+import { ASSISTANTS } from "@/constants/assistants";
+import { useOnboarding } from "@/hooks/useOnboarding";
+import { useLegalAssistantStore } from "@/stores/LegalAssistantStore";
+import type { AssistantId } from "@/types/assistant";
 
-export default function Onboarding() {
-  const router = useRouter();
-
+export default function SelectAssistant() {
+  const { completeOnboarding } = useOnboarding();
   const { selectedAssistantId, setSelectedAssistant } =
     useLegalAssistantStore();
 
-  const handleSelect = async (assistantId: string) => {
+  const handleSelect = (assistantId: AssistantId) => {
     setSelectedAssistant(assistantId);
   };
 
-  const handleFinish = async () => {
-    // 1. Guardamos la marca
-    await AsyncStorage.setItem("hasViewedOnboarding", "true");
-
-    // 2. Reemplazamos la ruta hacia el grupo del drawer
-    router.replace("/(drawer)/chat");
+  const handleFinish = () => {
+    completeOnboarding();
   };
 
   return (
@@ -59,44 +54,14 @@ export default function Onboarding() {
           </Text>
 
           <View className="flex flex-row items-center justify-center gap-4">
-            <Pressable
-              onPress={() => handleSelect("diogenes")}
-              className={`flex flex-col items-center gap-4 bg-foreground p-5 rounded-3xl h-64 w-2/5 border-2 ${
-                selectedAssistantId === "diogenes"
-                  ? "border-primary"
-                  : "border-transparent"
-              } active:scale-95 active:opacity-80`}
-            >
-              <Image
-                source={{ uri: "https://github.com/shadcn.png" }}
-                className="w-full h-32 rounded-2xl"
+            {ASSISTANTS.map((assistant) => (
+              <AssistantCard
+                key={assistant.id}
+                assistant={assistant}
+                isSelected={selectedAssistantId === assistant.id}
+                onPress={() => handleSelect(assistant.id)}
               />
-              <View className="flex flex-col items-center gap-2">
-                <Text className="text-white text-lg font-bold">Diógenes</Text>
-                <Text className="text-slate-400 text-center text-sm">
-                  Direct, logical and to the point
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              onPress={() => handleSelect("aspasia")}
-              className={`flex flex-col items-center gap-4 bg-foreground p-5 rounded-3xl h-64 w-2/5 border-2 ${
-                selectedAssistantId === "aspasia"
-                  ? "border-primary"
-                  : "border-transparent"
-              } active:scale-95 active:opacity-80`}
-            >
-              <Image
-                source={{ uri: "https://github.com/shadcn.png" }}
-                className="w-full h-32 rounded-2xl"
-              />
-              <View className="flex flex-col items-center gap-2">
-                <Text className="text-white text-lg font-bold">Aspasia</Text>
-                <Text className="text-slate-400 text-center text-sm">
-                  Retorical and persuasive
-                </Text>
-              </View>
-            </Pressable>
+            ))}
           </View>
           <Pressable
             onPress={handleFinish}
