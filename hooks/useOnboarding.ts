@@ -4,18 +4,22 @@ import { useEffect, useState } from "react";
 
 const ONBOARDING_KEY = "hasViewedOnboarding";
 
-export const useOnboarding = () => {
+export const useOnboarding = (check = true) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkOnboarding();
-  }, []);
+    if (check) {
+      checkOnboarding();
+    } else {
+      setLoading(false);
+    }
+  }, [check]);
 
   const checkOnboarding = async () => {
     try {
       const viewed = await AsyncStorage.getItem(ONBOARDING_KEY);
-      
+
       if (viewed === "true") {
         router.replace("/(drawer)/chat");
       } else {

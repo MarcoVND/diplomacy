@@ -27,6 +27,8 @@ export default function RootLayout() {
         sceneStyle: {
           backgroundColor: "#1a1a1a",
         },
+        swipeEnabled: true,
+        swipeMinDistance: 900,
       }}
     >
       <Drawer.Screen

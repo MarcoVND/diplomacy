@@ -6,17 +6,19 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: "fade_from_bottom",
+        animation: "slide_from_left",
         contentStyle: {
           backgroundColor: "#1a1a1a",
         },
       }}
     >
       <Stack.Screen name="index" />
-
-      <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
-
-      <Stack.Screen name="(drawer)" />
+      <Stack.Screen name="SelectAssistant" options={{ gestureEnabled: true }} />
+      <Stack.Screen
+        name="customizeAssistant"
+        options={{ gestureEnabled: true }}
+      />
+      <Stack.Screen name="(drawer)" options={{ gestureEnabled: true }} />
     </Stack>
   );
 }

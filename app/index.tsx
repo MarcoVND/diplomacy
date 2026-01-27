@@ -1,5 +1,5 @@
-import { ActivityIndicator, View } from "react-native";
 import { useOnboarding } from "@/hooks/useOnboarding";
+import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   useOnboarding();

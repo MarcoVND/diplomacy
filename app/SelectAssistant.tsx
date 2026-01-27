@@ -1,15 +1,17 @@
-import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { LegalAssistantSelector } from "@/components/widgets";
 import AssistantCard from "@/components/widgets/AssistantCard";
 import { ASSISTANTS } from "@/constants/assistants";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useLegalAssistantStore } from "@/stores/LegalAssistantStore";
 import type { AssistantId } from "@/types/assistant";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
+import { Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SelectAssistant() {
-  const { completeOnboarding } = useOnboarding();
+  const { completeOnboarding } = useOnboarding(false);
   const { selectedAssistantId, setSelectedAssistant } =
     useLegalAssistantStore();
 
@@ -63,6 +65,19 @@ export default function SelectAssistant() {
               />
             ))}
           </View>
+          <LegalAssistantSelector
+            onPress={() => router.push("/customizeAssistant")}
+          >
+            <View className="p-2 bg-[#1f2937] rounded-full">
+              <Ionicons name="add-outline" size={24} color="#9ca3af" />
+            </View>
+            <Text className="flex-1 text-white font-bold text-xl shrink">
+              Create Custom Assistant
+            </Text>
+            <View>
+              <Ionicons name="chevron-forward" size={24} color="#cfd7dd" />
+            </View>
+          </LegalAssistantSelector>
           <Pressable
             onPress={handleFinish}
             className="flex flex-row items-center justify-center bg-primary w-full h-16 rounded-full"
