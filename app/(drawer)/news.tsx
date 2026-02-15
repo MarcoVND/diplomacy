@@ -1,11 +1,15 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { useNews } from "@/hooks/useNews";
+import { NewsList } from "@/components/shared/news-list";
 
 const News = () => {
+  const { news, selectedNewsId, handleNewsPress } = useNews();
+
   return (
-    <View>
-      <Text className="text-white">news</Text>
-    </View>
+    <NewsList
+      news={news}
+      selectedNewsId={selectedNewsId}
+      onNewsPress={handleNewsPress}
+    />
   );
 };
 
