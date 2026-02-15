@@ -10,6 +10,7 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ news, onPress, className }: NewsCardProps) {
+  
   return (
     <Pressable
       onPress={onPress}
