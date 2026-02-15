@@ -1,8 +1,8 @@
 import { Button, ChatBubble, Checkbox, CheckboxLabel } from "@/components/ui";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from "react-native";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from "react-native";
 
 interface Message {
   id: string;
@@ -17,14 +17,64 @@ const MOCK_MESSAGES: Message[] = [
   { id: "3", text: "Of course! What would you like to know?", isOwn: false, timestamp: "10:32 AM" },
 ];
 
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 export default function Chat() {
   const { resetOnboarding } = useOnboarding();
   const [isChecked, setIsChecked] = useState(false);
+  const [inputMessage, setInputMessage] = useState("");
+  const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const showListener = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+    });
+
+    const hideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, []);
+
+  const handleSendMessage = useCallback(() => {
+    if (!inputMessage.trim()) return;
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: inputMessage.trim(),
+      isOwn: true,
+      timestamp: formatTime(new Date()),
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
+    setInputMessage("");
+
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, [inputMessage]);
 
   return (
-    <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView className="flex-1 px-4">
-        {MOCK_MESSAGES.map((message) => (
+    <View className="flex-1">
+      <ScrollView 
+        ref={scrollViewRef} 
+        className="flex-1 px-4" 
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 16 }}
+      >
+        {messages.map((message) => (
           <ChatBubble
             key={message.id}
             message={message.text}
@@ -34,7 +84,10 @@ export default function Chat() {
         ))}
       </ScrollView>
 
-      <View className="flex flex-row flex-wrap w-11/12 bg-foreground mx-auto rounded-3xl p-2 mb-4">
+      <View 
+        className="flex flex-row flex-wrap w-11/12 bg-foreground mx-auto rounded-3xl p-2"
+        style={{ marginBottom: keyboardHeight > 0 ? keyboardHeight - 20 : 16 }}
+      >
         <TextInput
           className="flex-1 text-secondary-foreground"
           placeholderClassName="text-secondary-foreground"
@@ -42,8 +95,10 @@ export default function Chat() {
           placeholder="Ask a legal question..."
           multiline
           textAlignVertical="top"
+          value={inputMessage}
+          onChangeText={setInputMessage}
         />
-        <Button className="w-14 rounded-full">
+        <Button className="w-14 rounded-full" onPress={handleSendMessage}>
           <Ionicons name="send-sharp" size={15}></Ionicons>
         </Button>
         
@@ -56,6 +111,6 @@ export default function Chat() {
           <CheckboxLabel className="text-secondary-foreground">Web</CheckboxLabel>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
