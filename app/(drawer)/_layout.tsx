@@ -67,6 +67,17 @@ export default function RootLayout() {
           ),
         }}
       />
+
+      <Drawer.Screen
+        name="law"
+        options={{
+          drawerLabel: "Law",
+          title: "Law",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="document-text-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Drawer>
   );
 }
