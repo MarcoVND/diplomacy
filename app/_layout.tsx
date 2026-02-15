@@ -1,21 +1,24 @@
-import { ThemeProvider, useTheme } from '@/lib/theme-context';
-import { Slot } from 'expo-router';
-import { View } from 'react-native';
-import './global.css';
+import { Stack } from "expo-router";
+import "./global.css";
 
 export default function RootLayout() {
   return (
-    <ThemeProvider defaultTheme="system">
-      <AppContent />
-    </ThemeProvider>
-  );
-}
-
-function AppContent() {
-  const { activeTheme } = useTheme();
-  return (
-    <View style={activeTheme} className="flex-1 bg-background">
-      <Slot />
-    </View>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_left",
+        contentStyle: {
+          backgroundColor: "#1a1a1a",
+        },
+      }}
+    >
+      <Stack.Screen name="index" />
+      <Stack.Screen name="SelectAssistant" options={{ gestureEnabled: true }} />
+      <Stack.Screen
+        name="customizeAssistant"
+        options={{ gestureEnabled: true }}
+      />
+      <Stack.Screen name="(drawer)" options={{ gestureEnabled: true }} />
+    </Stack>
   );
 }

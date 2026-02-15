@@ -1,12 +1,12 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import { useOnboarding } from "@/hooks/useOnboarding";
+import { ActivityIndicator, View } from "react-native";
 
-const index = () => {
+export default function Index() {
+  useOnboarding();
+
   return (
-    <View className='pt-10'>
-        <Text className='text-red-500'>Index Page</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
     </View>
-  )
+  );
 }
-
-export default index
